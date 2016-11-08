@@ -7,12 +7,10 @@ import org.junit.Test
 class ExampleTest {
     val employee = Employee("Tony", Company("Evil Ducks", Address(22, Street("Acacia Avenue"))))
 
-    @Test fun `let us start by creating a lens on a simple data class`() {
+    @Test fun `let us start by accessing some simple data classes`() {
         assertThat(employee.name, equalTo("Tony"))
+        assertThat(employee.company.name, equalTo("Evil Ducks"))
+        assertThat(employee.company.address.number, equalTo(22))
+        assertThat(employee.company.address.street.name, equalTo("Acacia Avenue"))
     }
 }
-
-data class Street(val name: String)
-data class Address(val number: Int, val street: Street)
-data class Company(val name: String, val address: Address)
-data class Employee(val name: String, val company: Company)
