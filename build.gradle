@@ -14,4 +14,6 @@ repositories { maven { url  "http://dl.bintray.com/kotlin/kotlin-eap-1.1" } }
 
 dependencies {
   compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  testCompile "junit:junit:4.12"
+  testCompile "org.hamcrest:hamcrest-core:1.3"
 }
