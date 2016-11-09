@@ -4,6 +4,7 @@ package evil.ducks.monokle
 
 import evil.ducks.monokle.ExampleLens._address
 import evil.ducks.monokle.ExampleLens._company
+import evil.ducks.monokle.ExampleLens._companyAddress
 import evil.ducks.monokle.ExampleLens._street
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -14,7 +15,7 @@ object ExampleLens {
     val _address = Lens(Company::address, { a -> { c -> c.copy(address = a) } })
     val _street  = Lens(Address::street, { s -> { a -> a.copy(street = s) } })
 
-//    val _companyAddress = _company composeLens _address
+    val _companyAddress = _company composeLens _address
 }
 
 class ExampleTest {
@@ -43,5 +44,13 @@ class ExampleTest {
         val movedCompany = moveTo(bakerStreet)(evilDucks)
 
         assertThat(movedCompany.address, equalTo(bakerStreet))
+    }
+
+    @Test fun `lens should compose`() {
+        val bakerStreet = Address(221, Street("Baker Street"))
+        val result = _companyAddress.modify({ bakerStreet }, tony)
+
+        assertThat(_companyAddress.get(tony), equalTo(evilDucksBuilding))
+        assertThat(result.company.address, equalTo(bakerStreet))
     }
 }
