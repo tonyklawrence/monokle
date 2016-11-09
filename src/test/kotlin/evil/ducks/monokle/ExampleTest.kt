@@ -40,10 +40,8 @@ class ExampleTest {
         val moveTo = { address: Address -> { company: Company -> _address.modify( { address }, company) }}
 
         val bakerStreet = Address(221, Street("Baker Street"))
-        val result = moveTo(bakerStreet)(evilDucks)
+        val movedCompany = moveTo(bakerStreet)(evilDucks)
 
-        assertThat(result.address, equalTo(bakerStreet))
+        assertThat(movedCompany.address, equalTo(bakerStreet))
     }
 }
-
-private fun <A, B> Lens<A, B>.modify(ƒ: (B) -> B, a: A) = set(ƒ(get(a)))(a)
