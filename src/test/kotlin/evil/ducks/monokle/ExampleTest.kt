@@ -30,9 +30,20 @@ class ExampleTest {
         assertThat(tony.company.address.street.name, equalTo("Acacia Avenue"))
     }
 
-    @Test fun `using a simple data class lens makes light work`() {
+    @Test fun `using a simple data class lens makes reading light work`() {
         assertThat(_company.get(tony), equalTo(evilDucks))
         assertThat(_address.get(evilDucks), equalTo(evilDucksBuilding))
         assertThat(_street.get(evilDucksBuilding), equalTo(acaciaAvenue))
     }
+
+    @Test fun `with lens we can modify inside nested structures`() {
+        val moveTo = { address: Address -> { company: Company -> _address.modify( { address }, company) }}
+
+        val bakerStreet = Address(221, Street("Baker Street"))
+        val result = moveTo(bakerStreet)(evilDucks)
+
+        assertThat(result.address, equalTo(bakerStreet))
+    }
 }
+
+private fun <A, B> Lens<A, B>.modify(ƒ: (B) -> B, a: A) = set(ƒ(get(a)))(a)
